@@ -99,12 +99,12 @@ To be updated soon...
 ## Citation
 If you use this code for your research or project, please cite:
 
-	@arxiv{wu2024megafusion,
-      title     = {MegaFusion: Extend Diffusion Models towards Higher-resolution Image Generation without Further Tuning}, 
-      author    = {Haoning Wu, Shaocheng Shen, Qiang Hu, Xiaoyun Zhang, Ya Zhang, Yanfeng Wang},
-      year      = {2024},
-      journal   = {arXiv preprint arXiv:2408.11001},
-	}
+	@InProceedings{wu2024megafusion,
+            author    = {Wu, Haoning and Shen, Shaocheng and Hu, Qiang and Zhang, Xiaoyun and Zhang, Ya and Wang, Yanfeng},
+            title     = {MegaFusion: Extend Diffusion Models towards Higher-resolution Image Generation without Further Tuning},
+            booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+            year      = {2025},
+      }
 
 ## Acknowledgements
 Many thanks to the code bases from [diffusers](https://github.com/huggingface/diffusers), [SimpleSDM](https://github.com/haoningwu3639/SimpleSDM), [SimpleSDXL](https://github.com/haoningwu3639/SimpleSDXL), and [DeepFloyd](https://github.com/deep-floyd/IF).
