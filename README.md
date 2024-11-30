@@ -13,8 +13,8 @@ We are in the process of standardizing and gradually open-sourcing our code in t
 ## News
 - [2024.11] After finishing other paper submissions, we finally release the MegaFusion code.
 - [2024.10] MegaFusion has been accepted to WACV 2025.
-- [2024.9] A new version of the paper has been updated. Please check out our latest version paper for further technical details, evaluations, and visualizations.
-- [2024.8] Our pre-print paper is released on arXiv, we are working on releasing our code and will open-source it shortly.
+- [2024.9] A new version of the paper has been updated..
+- [2024.8] Our pre-print paper is released on arXiv.
 
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
@@ -68,7 +68,6 @@ cd SD3-MegaFusion
 CUDA_VISIBLE_DEVICES=0 python inference.py
 ```
 
-
 ### Inference with Floyd-MegaFusion
 Taking computational overhead into consideration, we only use the first two stages of DeepFloyd, and discard the last stage in our project.
 First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingface.co/DeepFloyd/IF-I-XL-v1.0/). Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./DeepFloyd/ckpt/`.
@@ -76,9 +75,21 @@ First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingfac
 To be updated soon...
 
 ### Inference with ControlNet-MegaFusion
+
+Run the inference demo with:
+```
+cd ControlNet-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
 To be updated soon...
 
 ### Inference with IP-Adapter-MegaFusion
+
+Run the inference demo with:
+```
+cd IPAdapter-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
 To be updated soon...
 
 ## Evaluation
@@ -102,7 +113,7 @@ To be updated soon...
 - [x] Complete Bibtex
 - [x] Code of SDM-MegaFusion
 - [x] Code of SDXL-MegaFusion
-- [ ] Code of SD3-MegaFusion
+- [x] Code of SD3-MegaFusion
 - [ ] Code of Floyd-MegaFusion
 - [ ] Code of ControlNet-MegaFusion
 - [ ] Code of IPAdapter-MegaFusion

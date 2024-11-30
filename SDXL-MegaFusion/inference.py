@@ -133,7 +133,7 @@ def test(
     scheduler_high.set_timesteps(num_inference_steps, device=accelerator.device)
 
     timesteps_stage_1 = scheduler.timesteps[:stage_steps[0]]
-    timesteps_stage_2 = scheduler_high.timesteps[stage_steps[0]:stage_steps[0] + stage_steps[1]]
+    timesteps_stage_2 = scheduler_high.timesteps[stage_steps[0]:]
 
     with torch.no_grad():
         # Stage 1, 40 steps
