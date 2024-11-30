@@ -5,9 +5,10 @@ from einops import rearrange
 from typing import Callable, List, Optional, Union
 from diffusers import AutoencoderKL
 from diffusers.utils import is_accelerate_available, logging
-from diffusers.pipeline_utils import DiffusionPipeline
+from diffusers.pipelines.pipeline_utils import DiffusionPipeline
 from diffusers.pipelines.stable_diffusion import StableDiffusionPipelineOutput
 from transformers import CLIPTextModel, CLIPTokenizer
+
 from model.scheduling_ddim import DDIMScheduler
 from model.unet_2d_condition import UNet2DConditionModel
 

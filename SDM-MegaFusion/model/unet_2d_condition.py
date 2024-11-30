@@ -107,7 +107,7 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin):
         time_embedding_type: str = "positional",  # fourier, positional
         conv_in_kernel: int = 3,
         conv_out_kernel: int = 3,
-        if_dilation: Optional[bool] = True,
+        if_dilation: Optional[bool] = False,
     ):
         super().__init__()
 

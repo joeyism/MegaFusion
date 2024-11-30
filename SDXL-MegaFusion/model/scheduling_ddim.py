@@ -12,14 +12,6 @@ from diffusers.schedulers.scheduling_utils import KarrasDiffusionSchedulers, Sch
 @dataclass
 # Copied from diffusers.schedulers.scheduling_ddpm.DDPMSchedulerOutput with DDPM->DDIM
 class DDIMSchedulerOutput(BaseOutput):
-    """
-    Output class for the scheduler's step function output.
-
-    Args:
-        prev_sample (`torch.FloatTensor`): Computed sample (x_{t-1}) of previous timestep.
-        pred_original_sample (`torch.FloatTensor`, optional): The predicted denoised sample (x_{0}).
-    """
-
     prev_sample: torch.FloatTensor
     pred_original_sample: Optional[torch.FloatTensor] = None
 
@@ -101,11 +93,11 @@ class DDIMScheduler(SchedulerMixin, ConfigMixin):
         
         # Noise Rescheduling
         # Please refer to the paper of MegaFusion for the following formulations.
-        if reschedule_res == 512:
+        if reschedule_res == 1024:
             self.alphas_cumprod = self.alphas_cumprod
-        elif reschedule_res == 768:
+        elif reschedule_res == 1536:
             self.alphas_cumprod = self.alphas_cumprod * 1.0 / (2.25 - 1.25 * self.alphas_cumprod)
-        elif reschedule_res == 1024:
+        elif reschedule_res == 2048:
             self.alphas_cumprod = self.alphas_cumprod * 1.0 / (4.0 - 3.0 * self.alphas_cumprod)
         
         alphas_cumprod_restore = torch.empty_like(self.alphas_cumprod)

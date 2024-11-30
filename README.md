@@ -11,18 +11,19 @@ We are in the process of standardizing and gradually open-sourcing our code in t
 [Project Page](https://haoningwu3639.github.io/MegaFusion/)  $\cdot$ [Paper](https://arxiv.org/abs/2408.11001/)
 
 ## News
-- [2024.11] After finishing other paper submissions, we finally release the MegaFusion code, starting with SDM-MegaFusion.
+- [2024.11] After finishing other paper submissions, we finally release the MegaFusion code.
 - [2024.10] MegaFusion has been accepted to WACV 2025.
 - [2024.9] A new version of the paper has been updated. Please check out our latest version paper for further technical details, evaluations, and visualizations.
 - [2024.8] Our pre-print paper is released on arXiv, we are working on releasing our code and will open-source it shortly.
 
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
-- [PyTorch >= 1.12](https://pytorch.org/)
-- xformers == 0.0.13
-- diffusers == 0.13.1
+- [PyTorch >= 2.1.0](https://pytorch.org/)
+- xformers == 0.0.27
+- diffusers == 0.31.0
 - accelerate == 0.17.1
-- transformers == 4.27.4
+- transformers == 4.46.3
+- triton == 2.3.1
 
 A suitable [conda](https://conda.io/) environment named `megafusion` can be created and activated with:
 
@@ -41,7 +42,7 @@ Then, all the pre-trained checkpoints should be placed into the corresponding lo
 Run the inference demo with:
 ```
 cd SDM-MegaFusion
-CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation True --if_reschedule True
+CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation False --if_reschedule False
 ```
 
 ### Inference with SDXL-MegaFusion
@@ -49,18 +50,28 @@ Taking computational overhead into consideration, we only use SDXL-base, and dis
 First, please download pre-trained StableDiffusion-XL from [SDXL-base](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/). 
 Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SDXL-MegaFusion/ckpt/`.
 
+Note: Since the VAE of this ckpt does not support float16 inference, we recommend that you download the fixed version of VAE checkpoint from [sdxl-vae-fp16-fix](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix) to support generation under float16.
+
 Run the inference demo with:
 ```
 cd SDXL-MegaFusion
-CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation True --if_reschedule True
+CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation False --if_reschedule False
 ```
 
 ### Inference with SD3-MegaFusion
-To be updated soon...
+First, please download pre-trained StableDiffusion-3-medium from [SD3](https://huggingface.co/stabilityai/stable-diffusion-3-medium).
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SD3-MegaFusion/ckpt/
+
+Run the inference demo with:
+```
+cd SD3-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
+
 
 ### Inference with Floyd-MegaFusion
 Taking computational overhead into consideration, we only use the first two stages of DeepFloyd, and discard the last stage in our project.
-First, please download pre-trained DeepFloyd from [SDM](https://huggingface.co/DeepFloyd/IF-I-XL-v1.0/). Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./DeepFloyd/ckpt/`.
+First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingface.co/DeepFloyd/IF-I-XL-v1.0/). Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./DeepFloyd/ckpt/`.
 
 To be updated soon...
 
@@ -90,9 +101,9 @@ To be updated soon...
 - [x] Release Paper
 - [x] Complete Bibtex
 - [x] Code of SDM-MegaFusion
-- [ ] Code of SDXL-MegaFusion
-- [ ] Code of Floyd-MegaFusion
+- [x] Code of SDXL-MegaFusion
 - [ ] Code of SD3-MegaFusion
+- [ ] Code of Floyd-MegaFusion
 - [ ] Code of ControlNet-MegaFusion
 - [ ] Code of IPAdapter-MegaFusion
 - [ ] Image Caption Code of MiniGPT-v2

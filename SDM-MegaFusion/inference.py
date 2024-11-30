@@ -23,6 +23,7 @@ def get_parser():
     parser.add_argument('--logdir', default="./test/", type=str)
     parser.add_argument('--ckpt', default='./ckpt/stable-diffusion-v1-5/', type=str)
     parser.add_argument('--prompt', default="A large bear laying on the side of a rocky", type=str)
+    parser.add_argument('--mixed_precision', default='fp16', type=str)
     parser.add_argument('--guidance_scale', default=7.0, type=float)
     parser.add_argument('--if_reschedule', default=False, type=bool)
     parser.add_argument('--if_dilation', default=False, type=bool)
@@ -109,37 +110,42 @@ def test(
                 stage_timesteps=timesteps
             )
         return x_0_predict.images[0][0]
-
+    
     scheduler.set_timesteps(num_inference_steps, device=accelerator.device)
     scheduler_mid.set_timesteps(num_inference_steps, device=accelerator.device)
     scheduler_high.set_timesteps(num_inference_steps, device=accelerator.device)
     
     timesteps_stage_1 = scheduler.timesteps[:stage_steps[0]]
     timesteps_stage_2 = scheduler_mid.timesteps[stage_steps[0]:stage_steps[0] + stage_steps[1]]
-    timesteps_stage_3 = scheduler_high.timesteps[stage_steps[0] + stage_steps[1]:stage_steps[0] + stage_steps[1] + stage_steps[2]]
+    timesteps_stage_3 = scheduler_high.timesteps[stage_steps[0] + stage_steps[1]:]
     
-    # Stage 1, 40 steps
-    x_0_predict = generate_image(prompt, stage_resolutions[0], stage_resolutions[0], noise_latents, num_inference_steps, guidance_scale, timesteps_stage_1)
-    
-    # Stage 2, 5 steps
-    x_0_predict = x_0_predict.resize((stage_resolutions[1], stage_resolutions[1]), Image.Resampling.BICUBIC)
-    latents = encode_image(x_0_predict)
-    noise = torch.randn_like(latents)
-    # if_reschedule controls whether to reschedule the scheduler or not
-    pipeline.scheduler = scheduler_mid if if_reschedule else scheduler
-    latents_MR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_2[0])
-    x_0_predict = generate_image(prompt, stage_resolutions[1], stage_resolutions[1], latents_MR, num_inference_steps, guidance_scale, timesteps_stage_2)
-    
-    # Stage 3, 5 steps
-    x_0_predict = x_0_predict.resize((stage_resolutions[2], stage_resolutions[2]), Image.Resampling.BICUBIC)
-    latents = encode_image(x_0_predict)
-    noise = torch.randn_like(latents)
-    # if_reschedule controls whether to reschedule the scheduler or not
-    pipeline.scheduler = scheduler_high if if_reschedule else scheduler
-    latents_HR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_3[0])
-    output_image = generate_image(prompt, stage_resolutions[2], stage_resolutions[2], latents_HR, num_inference_steps, guidance_scale, timesteps_stage_3)
+    with torch.no_grad():
+        # Stage 1, 40 steps
+        x_0_predict = generate_image(prompt, stage_resolutions[0], stage_resolutions[0], noise_latents, num_inference_steps, guidance_scale, timesteps_stage_1)
+        
+        # Stage 2, 5 steps
+        x_0_predict = x_0_predict.resize((stage_resolutions[1], stage_resolutions[1]), Image.Resampling.BICUBIC)
+        latents = encode_image(x_0_predict)
+        noise = torch.randn_like(latents)
+        # if_reschedule controls whether to reschedule the scheduler or not
+        pipeline.scheduler = scheduler_mid if if_reschedule else scheduler
+        latents_MR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_2[0])
+        # Optional: We found that a relatively small noise may lead to better generation results, when using reschedule strategy.
+        # latents_MR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_2[2]) if if_reschedule pipeline.scheduler.add_noise(latents, noise, timesteps_stage_2[0]) 
+        x_0_predict = generate_image(prompt, stage_resolutions[1], stage_resolutions[1], latents_MR, num_inference_steps, guidance_scale, timesteps_stage_2)
+        
+        # Stage 3, 5 steps
+        x_0_predict = x_0_predict.resize((stage_resolutions[2], stage_resolutions[2]), Image.Resampling.BICUBIC)
+        latents = encode_image(x_0_predict)
+        noise = torch.randn_like(latents)
+        # if_reschedule controls whether to reschedule the scheduler or not
+        pipeline.scheduler = scheduler_high if if_reschedule else scheduler
+        latents_HR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_3[0])
+        # Optional: We found that a relatively small noise may lead to better generation results, when using reschedule strategy.
+        # latents_MR = pipeline.scheduler.add_noise(latents, noise, timesteps_stage_3[2]) if if_reschedule pipeline.scheduler.add_noise(latents, noise, timesteps_stage_3[0]) 
+        output_image = generate_image(prompt, stage_resolutions[2], stage_resolutions[2], latents_HR, num_inference_steps, guidance_scale, timesteps_stage_3)
 
-    output_image.save(os.path.join(logdir, "example_MegaFusion.png"))
+        output_image.save(os.path.join(logdir, "example_MegaFusion.png"))
 
 if __name__ == "__main__":
     parser = get_parser()
@@ -148,6 +154,7 @@ if __name__ == "__main__":
         pretrained_model_path=args.ckpt,
         logdir=args.logdir,
         prompt=args.prompt,
+        mixed_precision=args.mixed_precision,
         num_inference_steps=args.num_inference_steps,
         guidance_scale=args.guidance_scale,
         if_reschedule=args.if_reschedule,
