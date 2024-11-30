@@ -1,8 +1,6 @@
 # MegaFusion: Extend Diffusion Models towards Higher-resolution Image Generation without Further Tuning [WACV 2025]
 This repository contains the official PyTorch implementation of MegaFusion: https://arxiv.org/abs/2408.11001/
 
-We are in the process of standardizing and gradually open-sourcing our code in the near future, so please stay tuned.
-
 <div align="center">
    <img src="./teaser.png">
 </div>
@@ -11,9 +9,9 @@ We are in the process of standardizing and gradually open-sourcing our code in t
 [Project Page](https://haoningwu3639.github.io/MegaFusion/)  $\cdot$ [Paper](https://arxiv.org/abs/2408.11001/)
 
 ## News
-- [2024.11] After finishing other paper submissions, we finally release the MegaFusion code.
+- [2024.11] Code of MegaFusion has been released.
 - [2024.10] MegaFusion has been accepted to WACV 2025.
-- [2024.9] A new version of the paper has been updated..
+- [2024.9] A new version of the paper has been updated.
 - [2024.8] Our pre-print paper is released on arXiv.
 
 ## Requirements
@@ -33,7 +31,8 @@ conda activate megafusion
 ```
 
 ## Inference
-Since our MegaFusion is designed to extend existing diffusion-based text-to-image models towards higher-resolution generation. We provide the offical MegaFusion implementations on several representative models, including StableDiffusion, StableDiffusion-XL, DeepFloyd, ControlNet, and IP-Adapter.
+Since our MegaFusion is designed to extend existing diffusion-based text-to-image models towards higher-resolution generation. 
+We provide the offical MegaFusion implementations on several representative models, including StableDiffusion, StableDiffusion-XL, StableDiffusion-3, DeepFloyd, ControlNet, and IP-Adapter.
 
 ### Inference with SDM-MegaFusion
 First, please download pre-trained StableDiffusion-1.5 from [SDM-1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5). 
@@ -74,20 +73,22 @@ First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingfac
 
 To be updated soon...
 
+### Inference with IP-Adapter-MegaFusion
+First, please download pre-trained StableDiffusion-1.5 from [SDM-1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5). 
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./IP-Adapter-MegaFusion/ckpt/stable-diffusion-v1-5/`.
+Moreover, download pre-trained IP-Adapter from [IP-Adapter](https://huggingface.co/h94/IP-Adapter), and place it into `./IP-Adapter-MegaFusion/ckpt/`
+
+Run the inference demo with:
+```
+cd IPAdapter-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
+
 ### Inference with ControlNet-MegaFusion
 
 Run the inference demo with:
 ```
 cd ControlNet-MegaFusion
-CUDA_VISIBLE_DEVICES=0 python inference.py
-```
-To be updated soon...
-
-### Inference with IP-Adapter-MegaFusion
-
-Run the inference demo with:
-```
-cd IPAdapter-MegaFusion
 CUDA_VISIBLE_DEVICES=0 python inference.py
 ```
 To be updated soon...
@@ -114,9 +115,9 @@ To be updated soon...
 - [x] Code of SDM-MegaFusion
 - [x] Code of SDXL-MegaFusion
 - [x] Code of SD3-MegaFusion
+- [x] Code of IPAdapter-MegaFusion
 - [ ] Code of Floyd-MegaFusion
 - [ ] Code of ControlNet-MegaFusion
-- [ ] Code of IPAdapter-MegaFusion
 - [ ] Image Caption Code of MiniGPT-v2
 - [ ] Evaluation Code
 
