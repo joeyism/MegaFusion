@@ -82,24 +82,25 @@ def test(
         
         return latents
     
-    # Stage 1, 40 steps
-    x_0_predict = ip_model.generate(pil_image=ref_image, num_samples=1, width=stage_resolutions[0], height=stage_resolutions[0], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_1, seed=42)
-    
-    # Stage 2, 5 steps
-    x_0_predict = x_0_predict[0].resize((stage_resolutions[1], stage_resolutions[1]), Image.Resampling.BICUBIC)
-    latents = encode_image(x_0_predict)
-    noise = torch.randn_like(latents)
-    latents_MR = noise_scheduler.add_noise(latents, noise, timesteps_stage_2[0])
-    x_0_predict = ip_model.generate(pil_image=ref_image, latent=latents_MR, num_samples=1, width=stage_resolutions[1], height=stage_resolutions[1], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_2, seed=42)
+    with torch.no_grad():
+        # Stage 1, 40 steps
+        x_0_predict = ip_model.generate(pil_image=ref_image, num_samples=1, width=stage_resolutions[0], height=stage_resolutions[0], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_1, seed=42)
+        
+        # Stage 2, 5 steps
+        x_0_predict = x_0_predict[0].resize((stage_resolutions[1], stage_resolutions[1]), Image.Resampling.BICUBIC)
+        latents = encode_image(x_0_predict)
+        noise = torch.randn_like(latents)
+        latents_MR = noise_scheduler.add_noise(latents, noise, timesteps_stage_2[0])
+        x_0_predict = ip_model.generate(pil_image=ref_image, latent=latents_MR, num_samples=1, width=stage_resolutions[1], height=stage_resolutions[1], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_2, seed=42)
 
-    # Stage 3, 5 steps
-    x_0_predict = x_0_predict[0].resize((stage_resolutions[2], stage_resolutions[2]), Image.Resampling.BICUBIC)
-    latents = encode_image(x_0_predict)
-    noise = torch.randn_like(latents)
-    latents_HR = noise_scheduler.add_noise(latents, noise, timesteps_stage_3[0])
-    output_image = ip_model.generate(pil_image=ref_image, latent=latents_HR, num_samples=1, width=stage_resolutions[2], height=stage_resolutions[2], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_3, seed=42)
+        # Stage 3, 5 steps
+        x_0_predict = x_0_predict[0].resize((stage_resolutions[2], stage_resolutions[2]), Image.Resampling.BICUBIC)
+        latents = encode_image(x_0_predict)
+        noise = torch.randn_like(latents)
+        latents_HR = noise_scheduler.add_noise(latents, noise, timesteps_stage_3[0])
+        output_image = ip_model.generate(pil_image=ref_image, latent=latents_HR, num_samples=1, width=stage_resolutions[2], height=stage_resolutions[2], num_inference_steps=num_inference_steps, stage_timesteps=timesteps_stage_3, seed=42)
 
-    output_image[0].save(os.path.join(logdir, "example_MegaFusion.png"))
+        output_image[0].save(os.path.join(logdir, "example_MegaFusion.png"))
 
 
 if __name__ == '__main__':

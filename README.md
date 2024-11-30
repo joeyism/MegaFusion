@@ -47,7 +47,7 @@ CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation False --if_r
 ### Inference with SDXL-MegaFusion
 Taking computational overhead into consideration, we only use SDXL-base, and discard SDXL-refiner in our project. 
 First, please download pre-trained StableDiffusion-XL from [SDXL-base](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/). 
-Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SDXL-MegaFusion/ckpt/`.
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SDXL-MegaFusion/ckpt/stable-diffusion-xl-base-1.0/`.
 
 Note: Since the VAE of this ckpt does not support float16 inference, we recommend that you download the fixed version of VAE checkpoint from [sdxl-vae-fp16-fix](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix) to support generation under float16.
 
@@ -59,11 +59,33 @@ CUDA_VISIBLE_DEVICES=0 accelerate launch inference.py --if_dilation False --if_r
 
 ### Inference with SD3-MegaFusion
 First, please download pre-trained StableDiffusion-3-medium from [SD3](https://huggingface.co/stabilityai/stable-diffusion-3-medium).
-Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SD3-MegaFusion/ckpt/
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./SD3-MegaFusion/ckpt/stable-diffusion-3-medium/`
 
 Run the inference demo with:
 ```
 cd SD3-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
+
+### Inference with ControlNet-MegaFusion
+First, please download pre-trained StableDiffusion-1.5 from [SDM-1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5).
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./ControlNet-MegaFusion/ckpt/stable-diffusion-v1-5/`.
+Moreover, download pre-trained ControlNet from [ControlNet](https://huggingface.co/lllyasviel/sd-controlnet-canny), and place it into `./ControlNet-MegaFusion/ckpt/sd-controlnet-canny/`
+
+Run the inference demo with:
+```
+cd ControlNet-MegaFusion
+CUDA_VISIBLE_DEVICES=0 python inference.py
+```
+
+### Inference with IP-Adapter-MegaFusion
+First, please download pre-trained StableDiffusion-1.5 from [SDM-1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5). 
+Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./IP-Adapter-MegaFusion/ckpt/stable-diffusion-v1-5/`.
+Moreover, download pre-trained IP-Adapter from [IP-Adapter](https://huggingface.co/h94/IP-Adapter), and place it into `./IP-Adapter-MegaFusion/ckpt/`.
+
+Run the inference demo with:
+```
+cd IPAdapter-MegaFusion
 CUDA_VISIBLE_DEVICES=0 python inference.py
 ```
 
@@ -73,25 +95,6 @@ First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingfac
 
 To be updated soon...
 
-### Inference with IP-Adapter-MegaFusion
-First, please download pre-trained StableDiffusion-1.5 from [SDM-1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5). 
-Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./IP-Adapter-MegaFusion/ckpt/stable-diffusion-v1-5/`.
-Moreover, download pre-trained IP-Adapter from [IP-Adapter](https://huggingface.co/h94/IP-Adapter), and place it into `./IP-Adapter-MegaFusion/ckpt/`
-
-Run the inference demo with:
-```
-cd IPAdapter-MegaFusion
-CUDA_VISIBLE_DEVICES=0 python inference.py
-```
-
-### Inference with ControlNet-MegaFusion
-
-Run the inference demo with:
-```
-cd ControlNet-MegaFusion
-CUDA_VISIBLE_DEVICES=0 python inference.py
-```
-To be updated soon...
 
 ## Evaluation
 
@@ -107,7 +110,12 @@ To be updated soon...
 ### Caption synthesized images with VLM
 In our project, we use a state-of-the-art open-sourced VLM, [MiniGPT-v2](https://github.com/Vision-CAIR/MiniGPT-4) to give a caption for each synthesized image, to further evaluate the semantic correctness of higher-resolution generation.
 
-To be updated soon...
+Please git clone the MiniGPT-v2 repository and place it to ./MiniGPT-v2, download the required checkpoints, and use our script ./evaluation/MiniGPT-v2/caption.py to generate description.
+
+```
+cd evaluation/MiniGPT-v2
+CUDA_VISIBLE_DEVICES=0 python caption.py
+```
 
 ## TODO
 - [x] Release Paper
@@ -116,9 +124,9 @@ To be updated soon...
 - [x] Code of SDXL-MegaFusion
 - [x] Code of SD3-MegaFusion
 - [x] Code of IPAdapter-MegaFusion
+- [x] Code of ControlNet-MegaFusion
 - [ ] Code of Floyd-MegaFusion
-- [ ] Code of ControlNet-MegaFusion
-- [ ] Image Caption Code of MiniGPT-v2
+- [x] Image Caption Code of MiniGPT-v2
 - [ ] Evaluation Code
 
 
