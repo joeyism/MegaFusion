@@ -111,6 +111,7 @@ To be updated soon...
 In our project, we use a state-of-the-art open-sourced VLM, [MiniGPT-v2](https://github.com/Vision-CAIR/MiniGPT-4) to give a caption for each synthesized image, to further evaluate the semantic correctness of higher-resolution generation.
 
 Please git clone the MiniGPT-v2 repository and place it to ./MiniGPT-v2, download the required checkpoints, and use our script ./evaluation/MiniGPT-v2/caption.py to generate description.
+Since the environment and dependencies may be different or conflict with our MegaFusion, we recommend you to install another virtual environment to use this function.
 
 ```
 cd evaluation/MiniGPT-v2
@@ -119,7 +120,6 @@ CUDA_VISIBLE_DEVICES=0 python caption.py
 
 ## TODO
 - [x] Release Paper
-- [x] Complete Bibtex
 - [x] Code of SDM-MegaFusion
 - [x] Code of SDXL-MegaFusion
 - [x] Code of SD3-MegaFusion
