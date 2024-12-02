@@ -89,23 +89,23 @@ cd IPAdapter-MegaFusion
 CUDA_VISIBLE_DEVICES=0 python inference.py
 ```
 
-### Inference with Floyd-MegaFusion
-Taking computational overhead into consideration, we only use the first two stages of DeepFloyd, and discard the last stage in our project.
-First, please download pre-trained DeepFloyd from [DeepFloyd](https://huggingface.co/DeepFloyd/IF-I-XL-v1.0/). Then, all the pre-trained checkpoints should be placed into the corresponding location in the folder `./DeepFloyd/ckpt/`.
-
-To be updated soon...
-
-
 ## Evaluation
 
 ### Dataset
 Our main experiments are conducted on the commonly used MS-COCO dataset, you can download it from [MS-COCO](https://cocodataset.org/#home).
+We have provided the indices of subset we used in `./evaluation/MS-COCO_10K.json`.
 
 ### Metrics
 We use the commonly used [FID](https://github.com/mseitzer/pytorch-fid) and KID as main evalutaion metrics.
 Besides, to quantitatively evaluate the semantic correctness of the synthesized results, we also utilize several language-based scores in our work, including CLIP-T CIDEr, Meteor, and ROUGE.
 
-To be updated soon...
+Run the evluation demo with:
+```
+cd evaluation
+CUDA_VISIBLE_DEVICES=0 python evaluation.py
+```
+
+Note: You should first extract the test set, and place the ground truth images in one folder, the generated images in the other folder, and the synthesized textual captions in another folder (in the format of .txt for each image).
 
 ### Caption synthesized images with VLM
 In our project, we use a state-of-the-art open-sourced VLM, [MiniGPT-v2](https://github.com/Vision-CAIR/MiniGPT-4) to give a caption for each synthesized image, to further evaluate the semantic correctness of higher-resolution generation.
@@ -113,6 +113,7 @@ In our project, we use a state-of-the-art open-sourced VLM, [MiniGPT-v2](https:/
 Please git clone the MiniGPT-v2 repository and place it to ./MiniGPT-v2, download the required checkpoints, and use our script ./evaluation/MiniGPT-v2/caption.py to generate description.
 Since the environment and dependencies may be different or conflict with our MegaFusion, we recommend you to install another virtual environment to use this function.
 
+Run the inference demo with:
 ```
 cd evaluation/MiniGPT-v2
 CUDA_VISIBLE_DEVICES=0 python caption.py
@@ -125,9 +126,8 @@ CUDA_VISIBLE_DEVICES=0 python caption.py
 - [x] Code of SD3-MegaFusion
 - [x] Code of IPAdapter-MegaFusion
 - [x] Code of ControlNet-MegaFusion
-- [ ] Code of Floyd-MegaFusion
 - [x] Image Caption Code of MiniGPT-v2
-- [ ] Evaluation Code
+- [x] Evaluation Code
 
 
 ## Citation
@@ -142,7 +142,7 @@ If you use this code for your research or project, please cite:
 
 ## Acknowledgements
 Many thanks to the code bases from [diffusers](https://github.com/huggingface/diffusers), [SimpleSDM](https://github.com/haoningwu3639/SimpleSDM), 
-[SimpleSDXL](https://github.com/haoningwu3639/SimpleSDXL), [SimpleSDM-3](https://github.com/haoningwu3639/SimpleSDM-3), and [DeepFloyd](https://github.com/deep-floyd/IF).
+[SimpleSDXL](https://github.com/haoningwu3639/SimpleSDXL), and [SimpleSDM-3](https://github.com/haoningwu3639/SimpleSDM-3).
 
 ## Contact
 If you have any questions, please feel free to contact haoningwu3639@gmail.com or shenshaocheng@sjtu.edu.cn.
